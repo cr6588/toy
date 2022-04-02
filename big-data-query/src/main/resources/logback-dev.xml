@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <contextName>logback</contextName>
+
+   <appender name="A1" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %p - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="A2" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>big-data-query.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>big-data-query_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB -->  
+            <maxFileSize>4096KB</maxFileSize>  
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <!-- https://logback.qos.ch/manual/layouts.html -->
+        <!-- http://www.cnblogs.com/zno2/p/4792636.html -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %p - %m%n
+            </pattern>
+        </encoder>
+    </appender>
+
+<!--     <logger name="com.cr6588"  level="info" > -->
+<!--         <appender-ref ref="A1"/> -->
+<!--     </logger> -->
+    <Logger name="org.apache.zookeeper" level="info" />
+    <Logger name="com.alibaba.dubbo" level="info" />
+    <Logger name="org.springframework" level="info" />
+    <root level="info">
+        <appender-ref ref="A1" />
+    </root>
+
+</configuration>

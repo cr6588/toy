@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div id="app">
+	<div>
+	username<input type="text" v-model="user.username">
+	password<input type="password" v-model="user.password">
+	</div>
+<input type="button" @click="login" value="登陆">
+<input type="button" @click="register" value="注册">
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qs@6.10.3/dist/qs.js"></script>
+<script type="text/javascript">
+const qs = Qs
+var app = new Vue({
+	el: '#app',
+	data: {
+		user: {
+			username: '',
+			password: ''
+		},
+		list:[]
+	},
+	created () {
+		this.fetchData()
+	},
+	methods: {
+		login () {
+			axios.post('/api/login', this.user).then(res => {
+				if(res.data != 'succ') {
+					alert(res.data)
+					return
+				}
+				location.href="/userList"
+			})
+		},
+		register () {
+			axios.post('/api/register', this.user).then(res => {
+				alert(res.data)
+			})
+		}
+	}
+})
+</script>
+</body>
+</html>

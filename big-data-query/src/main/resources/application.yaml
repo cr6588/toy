@@ -1,0 +1,19 @@
+logging:
+  config: classpath:logback-dev.xml
+debug: false
+server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/big?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+    username: new
+    password: new
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#  mvc:
+#    static-path-pattern: /static/**
+
+#mybatis:
+#  type-aliases-package: com.cr6588.entity
+#  mapper-locations: classpath:com/cr6588/dao/mapper/*Mapper.xml
+#  configuration:
+#    map-underscore-to-camel-case: true
