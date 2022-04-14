@@ -46,7 +46,7 @@ public class RandomUtil {
         int count = Integer.parseInt(zhUnicodeEnd, 16) - Integer.parseInt(zhUnicodeStart, 16) + 1;
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
-            sb.append(Integer.toHexString(random.nextInt(count) + Integer.parseInt(zhUnicodeStart, 16)));
+            sb.append((char)(random.nextInt(count) + Integer.parseInt(zhUnicodeStart, 16)));
         }
         return sb.toString();
     }

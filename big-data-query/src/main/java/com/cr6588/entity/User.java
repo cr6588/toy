@@ -10,12 +10,13 @@ import java.util.Set;
 
 import org.springframework.util.StringUtils;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.cr6588.annotation.IgnoreParseToMap;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -24,19 +25,24 @@ import lombok.extern.slf4j.Slf4j;
  * @author chenyi
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 @Slf4j
 @TableName("user")
-public class User {
+public class User extends BaseEntity {
 
-    @TableId(type = IdType.ASSIGN_ID)
-    private Long id;
+    @TableField(whereStrategy = FieldStrategy.NOT_EMPTY)
     private String username;
+    @TableField(whereStrategy = FieldStrategy.NOT_EMPTY)
     private String name;
+    @TableField(whereStrategy = FieldStrategy.NOT_EMPTY)
     private String password;
 
+    private transient String usernameLike;
+    private transient String nameLike;
+
+
     /**
-     * 获取查询map
-     * 会忽略带有{@link IgnoreParseToMap}注解的属性以及静态属性
+     * 获取查询map 会忽略带有{@link IgnoreParseToMap}注解的属性以及静态属性
      * @param fields 要忽略的属性名称
      * @return
      */
@@ -56,7 +62,7 @@ public class User {
                     continue;
                 }
                 Annotation a = f.getAnnotation(IgnoreParseToMap.class);
-                if(a != null) {
+                if (a != null) {
                     continue;
                 }
                 String fieldName = f.getName();

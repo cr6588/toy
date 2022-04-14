@@ -1,8 +1,6 @@
 package com.cr6588.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,9 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.cr6588.dao.UserMapper;
 import com.cr6588.entity.User;
 import com.cr6588.service.UserService;
 import com.cr6588.util.RandomUtil;
+import com.cr6588.vo.ApiRes;
+import com.cr6588.vo.Pager;
 
 /**
  * create in 2022年03月30日
@@ -28,28 +30,30 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserMapper userMapper;
 
     @GetMapping
-    public List<User> getUserList(User user) {
-        return userService.getUserList(user.getParamMap());
+    public ApiRes<List<User>> getUserList(User user, Pager page) {
+        IPage<User> res = userService.getUserList(page, user);
+        Pager resPage = new Pager(res.getTotal(), res.getSize(), res.getCurrent());
+        return ApiRes.succ(res.getRecords(), resPage);
     }
 
     @PostMapping
     public String save(@RequestBody User user) {
         String numStr = RandomUtil.getNumStr(13);
         user.setId(Long.parseLong(numStr));
-        userService.saveUser(user);
+        userMapper.insert(user);
         return "succ";
     }
 
     @DeleteMapping
-    public String delete(@RequestParam("ids")List<Long> ids) {
+    public ApiRes<String> delete(@RequestParam("ids")List<Long> ids) {
         if(ids == null || ids.size() == 0) {
-            return "succ";
+            return ApiRes.err("id is null");
         }
-        Map<String, Object> param = new HashMap<String, Object>();
-        param.put("ids", ids);
-        userService.deleteUser(param);
-        return "succ";
+        userMapper.deleteBatchIds(ids);
+        return ApiRes.emptySucc();
     }
 }

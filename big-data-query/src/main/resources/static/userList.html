@@ -7,19 +7,36 @@
 <body>
 <div id="app">
 	<div>
-	username<input type="text" v-model="user.username">
-	name<input type="text" v-model="user.name">
+	username<input type="text" v-model="user.usernameLike">
+	name<input type="text" v-model="user.nameLike">
 	</div>
 
 <input type="button" @click="fetchData" value="搜索">
-<table>
-	<tr v-for="u in list" :key="u.id">
-		<td>{{ u.id }}</td>
-		<td>{{ u.username }}</td>
-		<td>{{ u.name }}</td>
-		<td><input type="button" @click="del(u.id)" value="删除"></td>
-	</tr>
-</table>
+<div class="table-context">
+    <table>
+        <tr>
+            <td>id</td>
+            <td>username</td>
+            <td>name</td>
+            <td>operate</td>
+        </tr>
+    	<tr v-for="u in list" :key="u.id">
+    		<td>{{ u.id }}</td>
+    		<td>{{ u.username }}</td>
+    		<td>{{ u.name }}</td>
+    		<td><input type="button" @click="del(u.id)" value="删除"></td>
+    	</tr>
+    </table>
+</div>
+<a @click="pager.current--;fetchData()">上一页</a>当前页{{ pager.current }},<a @click="pager.current++;fetchData()">下一页</a>,
+每页<select v-model="pager.size" @change="fetchData">
+<option value="10">10</option>
+<option value="20">20</option>
+<option value="50">50</option>
+<option value="100">100</option>
+<option value="200">200</option>
+</select>,
+总数{{ pager.total }}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
@@ -30,20 +47,28 @@ var app = new Vue({
 	el: '#app',
 	data: {
 		user: {
-			username: '',
-			name: ''
+			usernameLike: '',
+			nameLike: ''
 		},
-		list:[]
+		list:[],
+		pager:{
+			current:1,
+			size: 100,
+			total: 0
+		}
 	},
 	created () {
 		this.fetchData()
 	},
 	methods: {
 		fetchData () {
+			let query = Object.assign({}, this.user, this.pager)
 			axios.get('/api/user', {
-				params: this.user
+				params: query
 			}).then(res => {
-				this.list = res.data
+				let temp = res.data
+				this.list = temp.body
+				this.pager = temp.pager
 			})
 		},
 		del (id) {
@@ -62,5 +87,11 @@ var app = new Vue({
 	}
 })
 </script>
+<style>
+.table-context {
+    max-height: 200px;
+    overflow-y: scroll;
+}
+</style>
 </body>
 </html>
