@@ -15,8 +15,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.cr6588.annotation.IgnoreParseToMap;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -28,6 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 @EqualsAndHashCode(callSuper=false)
 @Slf4j
 @TableName("user")
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends BaseEntity {
 
     @TableField(whereStrategy = FieldStrategy.NOT_EMPTY)

@@ -1,0 +1,13 @@
+{
+  "settings" : {
+      "number_of_shards" : 10,
+      "number_of_replicas" : 2,
+        "refresh_interval" : "1s"
+  },
+  "mappings" : {
+    "properties" : {
+        "name" : { "type" : "text" },
+        "username" : { "type" : "text" }
+    }
+  }
+}

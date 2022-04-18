@@ -41,6 +41,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public IPage<User> getUserList(Pager pager, User user) {
         IPage<User> page = new Page<User>(pager.getCurrent(), pager.getSize());
+        if(user == null) {
+            user = new User();
+        }
         QueryWrapper<User> wrapper = new QueryWrapper<User>(user);
         //与like结果不一样
 //        wrapper.apply(StringUtils.hasText(user.getUsernameLike()), "match(username) against(+{0} in boolean mode)", user.getUsernameLike());
