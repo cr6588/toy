@@ -5,13 +5,18 @@ import java.io.IOException;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.cr6588.entity.User;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.ElasticsearchException;
+import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryStringQuery;
 import co.elastic.clients.elasticsearch.core.CreateRequest;
+import co.elastic.clients.elasticsearch.core.SearchRequest;
+import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.indices.ElasticsearchIndicesClient;
 import co.elastic.clients.elasticsearch.indices.GetIndexRequest;
 import co.elastic.clients.elasticsearch.indices.GetIndexResponse;
@@ -28,7 +33,7 @@ class ElasticSearchUtilTest {
 
     private ElasticsearchClient client = null;
 
-    @BeforeAll
+    @BeforeEach
     public void init() {
         RestClient restClient = RestClient.builder(new HttpHost("localhost", 9200)).build();
         ElasticsearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
@@ -37,7 +42,6 @@ class ElasticSearchUtilTest {
 
     @Test
     void test() throws ElasticsearchException, IOException {
-
         // client.index
 
         // boolean created = client.indices().create(req).acknowledged();
@@ -60,5 +64,36 @@ class ElasticSearchUtilTest {
         User user = new User("username", "name", "ps", "usernamelike", "nameLike");
         CreateRequest<User> reqqq = CreateRequest.of(p -> p.index("user").document(user));
         client.create(reqqq);
+    }
+
+    /**
+     * GET user/_search
+     * {
+     *   "query": {
+     *       "query_string": {
+     *         "query": "username: ab"
+     *       }
+     *   }
+     * }
+     * @throws IOException
+     */
+    @Test
+    void searchLikeTest() throws IOException {
+        SearchResponse<User> response = client.search(
+                SearchRequest.of(
+                        r -> r.index("user").query(
+                            Query.of(
+                                    q -> q.queryString(
+                                            QueryStringQuery.of(
+                                                    qsq -> qsq.query("ab")
+                                            )
+                                    )
+                            )
+                        )
+                ),
+            User.class
+        );
+        //只有10条数据
+        System.out.println(response.hits().toString());
     }
 }

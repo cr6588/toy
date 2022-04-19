@@ -9,6 +9,7 @@ import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cr6588.App;
@@ -92,8 +93,9 @@ public class UserTest {
         RestClient restClient = RestClient.builder(new HttpHost("localhost", 9200)).build();
         ElasticsearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
         ElasticsearchClient client = new ElasticsearchClient(transport);
-        Pager page = new Pager(1, 10000);
-        for (int i = 1; ; i++) {
+        int size = 30000;
+        Pager page = new Pager(size, 1, false);
+        for (int i = 170; ; i++) {
             page.setCurrent(i);
             IPage<User> res = userService.getUserList(page, null);
             List<User> users = res.getRecords();

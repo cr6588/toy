@@ -30,7 +30,21 @@ public class Pager {
      */
     protected long current = 1;
 
+    protected boolean searchCount = true;
+
     public Pager(long current, long size) {
-        this(0, size, current);
+        this(0, size, current, true);
+    }
+
+    public Pager(long size, long current, boolean searchCount) {
+        this.size = size;
+        this.current = current;
+        this.searchCount = searchCount;
+    }
+
+    public Pager(long total, long size, long current) {
+        this.total = total;
+        this.size = size;
+        this.current = current;
     }
 }

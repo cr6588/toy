@@ -43,10 +43,10 @@ class TTee {
         // for(IndicesRecord record:res.valueBody()) {
         // System.out.println(record.index());
         // }
-        InputStream stream = this.getClass().getResourceAsStream("data/user.json");
-        CreateIndexRequest req = CreateIndexRequest.of(b -> b.index("user").withJson(stream));
+//        InputStream stream = this.getClass().getResourceAsStream("data/user.json");
+//        CreateIndexRequest req = CreateIndexRequest.of(b -> b.index("user").withJson(stream));
         ElasticsearchIndicesClient indices = client.indices();
-        indices.create(req);
+//        indices.create(req);
         GetIndexRequest getIndexReq = GetIndexRequest.of(a -> a.index("user"));
         GetIndexResponse response = indices.get(getIndexReq);
         System.out.println(response.toString());;

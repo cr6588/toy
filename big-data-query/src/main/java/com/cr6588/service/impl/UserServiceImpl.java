@@ -40,7 +40,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public IPage<User> getUserList(Pager pager, User user) {
-        IPage<User> page = new Page<User>(pager.getCurrent(), pager.getSize());
+        IPage<User> page = new Page<User>(pager.getCurrent(), pager.getSize(), pager.isSearchCount());
         if(user == null) {
             user = new User();
         }
