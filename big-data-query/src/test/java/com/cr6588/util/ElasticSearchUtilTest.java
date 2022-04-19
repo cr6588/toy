@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.cr6588.entity.User;
@@ -28,7 +28,7 @@ class ElasticSearchUtilTest {
 
     private ElasticsearchClient client = null;
 
-    @Before
+    @BeforeAll
     public void init() {
         RestClient restClient = RestClient.builder(new HttpHost("localhost", 9200)).build();
         ElasticsearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
