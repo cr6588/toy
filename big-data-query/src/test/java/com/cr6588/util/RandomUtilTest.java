@@ -1,6 +1,7 @@
 package com.cr6588.util;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * create in 2022年04月05日

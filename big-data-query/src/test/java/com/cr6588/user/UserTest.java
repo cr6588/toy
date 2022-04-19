@@ -1,20 +1,12 @@
 package com.cr6588.user;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.http.HttpHost;
-import org.elasticsearch.client.RestClient;
-import org.junit.Assert;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch.core.BulkRequest;
+import co.elastic.clients.elasticsearch.core.bulk.BulkOperation;
+import co.elastic.clients.elasticsearch.core.bulk.CreateOperation;
+import co.elastic.clients.json.jackson.JacksonJsonpMapper;
+import co.elastic.clients.transport.ElasticsearchTransport;
+import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -25,22 +17,26 @@ import com.cr6588.entity.User;
 import com.cr6588.service.UserService;
 import com.cr6588.util.RandomUtil;
 import com.cr6588.vo.Pager;
+import org.apache.http.HttpHost;
+import org.elasticsearch.client.RestClient;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch.core.BulkRequest;
-import co.elastic.clients.elasticsearch.core.CreateRequest;
-import co.elastic.clients.elasticsearch.core.bulk.BulkOperation;
-import co.elastic.clients.elasticsearch.core.bulk.CreateOperation;
-import co.elastic.clients.json.jackson.JacksonJsonpMapper;
-import co.elastic.clients.transport.ElasticsearchTransport;
-import co.elastic.clients.transport.rest_client.RestClientTransport;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 /**
  * create in 2022年04月01日
  * @category TODO
  * @author chenyi
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = App.class)
 public class UserTest {
 
@@ -81,14 +77,14 @@ public class UserTest {
         User user = new User();
         userMapper.insert(user);
         Long id = user.getId();
-        Assert.assertNotNull(id);
+        Assertions.assertNotNull(id);
         IPage<User> page = new Page<User>(1, 1);
         Wrapper<User> query = new LambdaQueryWrapper<>(user);
         IPage<User> res = userMapper.selectPage(page, query);
-        Assert.assertEquals(res.getRecords().size(), 1);
-        Assert.assertEquals(res.getTotal(), 1);
+        Assertions.assertEquals(res.getRecords().size(), 1);
+        Assertions.assertEquals(res.getTotal(), 1);
         userMapper.deleteBatchIds(Arrays.asList(id));
-        Assert.assertNull(userMapper.selectById(id));
+        Assertions.assertNull(userMapper.selectById(id));
     }
 
     @Test
